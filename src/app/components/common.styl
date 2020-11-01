@@ -1,0 +1,63 @@
+
+$blueGray300 = #90A4AE
+$blueGray400 = #78909C
+$blueGray500 = #607D8B
+$blueGray800 = #37474F
+$blueGray900 = #263238
+
+$lightBlue100 = #B3E5FC
+$lightBlue500 = #03A9F4
+$lightBlue600 = #039BE5
+$lightBlue700 = #0288D1
+$lightBlue800 = #0277BD
+$lightBlue900 = #01579B
+
+$red300 = #E57373
+$red600 = #E53935
+
+$orange100 = #FFE0B2
+$orange300 = #FFB74D
+$orange500 = #FF9800
+$orange700 = #F57C00
+$orange900 = #E65100
+
+$deepOrange200 = #FFAB91
+$deepOrange500 = #FF5722
+$deepOrange700 = #E64A19
+
+$green200 = #A5D6A7
+$green300 = #81C784
+$green500 = #4CAF50
+$green700 = #388E3C
+$green800 = #2E7D32
+
+$teal400 = #26A69A
+$teal500 = #009688
+$teal700 = #00796B
+$teal800 = #00695C
+
+$yellow400 = #FFEE58
+$yellow500 = #FFEB3B
+$yellow600 = #FDD835
+$yellow700 = #FBC02D
+$yellow800 = #F9A825
+
+$white = #ffffff
+
+
+rotation(interval = 1s)
+    :global {
+        animation: rotation interval infinite linear
+    }
+
+maxWidth(width)
+    @media all and (max-width: width)
+        {block}
+
+minWidth(width)
+    @media all and (min-width: width)
+        {block}
+
+maxHeight(height)
+    @media all and (max-height: height)
+        {block}

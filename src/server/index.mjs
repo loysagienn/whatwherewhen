@@ -1,5 +1,6 @@
 import { HTTP_PORT } from 'config';
 import initKoaServer from './initKoaServer';
+import './parser';
 
 const initApp = async () => {
     try {

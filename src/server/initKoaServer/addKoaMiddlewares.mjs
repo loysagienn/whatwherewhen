@@ -1,10 +1,12 @@
 import withSession from './withSession';
 import withRoute from './withRoute';
+import withApi from './withApi';
 // import authStrava from './strava/authStrava';
 // import withAthleteId from './withAthleteId';
 // import withStravaCredentials from './strava/withStravaCredentials';
 // import unauthStrava from './strava/unauthStrava';
 // import handleApiRequest from './handleApiRequest';
+import handleApiRequest from './handleApiRequest';
 import withInitialState from './withInitialState';
 import handleHtmlRequest from './handleHtmlRequest';
 // import applyDemoAuth from './applyDemoAuth';
@@ -22,6 +24,8 @@ const addKoaMiddlewares = (koaServer) => {
     koaServer.use(withSession);
     // добавляем koaCtx.state.route
     koaServer.use(withRoute);
+    // добавляем koaCtx.state.api
+    koaServer.use(withApi);
     // обработка запроса авторизации в strava
     // koaServer.use(authStrava);
     // обработка запроса авторизации/деавторизации демо режима
@@ -33,7 +37,7 @@ const addKoaMiddlewares = (koaServer) => {
     // обработка запроса деавторизации в strava
     // koaServer.use(unauthStrava);
     // обработка api запросов
-    // koaServer.use(handleApiRequest);
+    koaServer.use(handleApiRequest);
     // логгируем запрос
     // koaServer.use(logVisit);
     // добавляем koaCtx.state.initialState для html странички

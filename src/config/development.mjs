@@ -5,7 +5,7 @@ export const IS_DEVELOPMENT = true;
 export const DOMAIN = 'localhost';
 export const HTTP_PORT = 3456;
 export const DB_URL = 'mongodb://127.0.0.1:27017';
-export const DB_ID = 'hello_world';
+export const DB_ID = 'what_when_where';
 
 export const CDN_URLS = {
     REACT: 'https://unpkg.com/react@16/umd/react.development.js',

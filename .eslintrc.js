@@ -35,8 +35,12 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'no-param-reassign': 'off',
         'react/jsx-filename-extension': [1, { extensions: ['.mjs'] }],
+        'react/prop-types': 'off',
+        'react/jsx-props-no-spreading': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
         'jsx-a11y/no-static-element-interactions': 'off',
+        'no-await-in-loop': 'off',
+        'no-plusplus': 'off',
     },
     overrides: [
         {
