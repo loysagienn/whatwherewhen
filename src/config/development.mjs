@@ -3,7 +3,7 @@ export * from './common';
 export const IS_PRODUCTION = false;
 export const IS_DEVELOPMENT = true;
 export const DOMAIN = 'localhost';
-export const HTTP_PORT = 3456;
+export const HTTP_PORT = 3478;
 export const DB_URL = 'mongodb://127.0.0.1:27017';
 export const DB_ID = 'what_when_where';
 

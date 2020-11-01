@@ -19,9 +19,14 @@ const questionGroups = handleActions({
     },
 }, {});
 
+const questions = handleActions({
+    [GROUP_CHILDREN_LOAD_DONE]: (state, { groupId, questions }) => ({ ...state, [groupId]: questions }),
+}, {});
+
 export default combineReducers({
     color,
     groupChildrenLoader,
     questionGroups,
+    questions,
     rootQuestionGroupId: (state = 0) => state,
 });

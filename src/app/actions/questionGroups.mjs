@@ -17,6 +17,8 @@ export const loadQuestionGroupChildren = (groupId) => async (dispatch, getState,
 
     let allChildrenGroups = [];
 
+    let allQuestions = [];
+
     if (questionGroup.children) {
         allChildrenGroups = await Promise.all(questionGroup.children.map(async (childGroupId) => {
             const { data } = await api.getQuestionGroup(childGroupId);
@@ -25,9 +27,19 @@ export const loadQuestionGroupChildren = (groupId) => async (dispatch, getState,
         }));
     }
 
+    if (questionGroup.questions) {
+        allQuestions = await Promise.all(questionGroup.questions.map(async (questionId) => {
+            const { data } = await api.getQuestion(questionId);
+
+            return data.question || null;
+        }));
+    }
+
     const childGroups = allChildrenGroups.filter(Boolean);
+
+    const questions = allQuestions.filter(Boolean);
 
     const groups = [...childGroups, questionGroup];
 
-    dispatch(loadDone({ groupId, groups }));
+    dispatch(loadDone({ groupId, groups, questions }));
 };

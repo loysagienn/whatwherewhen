@@ -15,3 +15,5 @@ export const selectQuestionGroupChildren = (groupId) => (state) => {
 
     return childrenIds.map((id) => selectQuestionGroup(id)(state)).filter(Boolean);
 };
+
+export const selectGroupQuestions = (groupId) => (state) => state.questions[groupId] || [];

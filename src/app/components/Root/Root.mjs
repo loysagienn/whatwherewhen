@@ -11,7 +11,9 @@ const Root = () => {
 
     return (
         <div className={css.root}>
-            <QuestionGroup groupId={rootQuestionGroupId} />
+            <div className={css.wrapper}>
+                <QuestionGroup groupId={rootQuestionGroupId} />
+            </div>
         </div>
     );
 };
