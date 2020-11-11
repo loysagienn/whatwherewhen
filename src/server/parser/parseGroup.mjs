@@ -35,8 +35,6 @@ const parseGroup = async (groupId) => {
 
     if (childGroups) {
         for (let i = 0; i < childGroups.length; i++) {
-            await wait(1000);
-
             const childGroup = childGroups[i];
 
             await parseGroup(childGroup.id);
