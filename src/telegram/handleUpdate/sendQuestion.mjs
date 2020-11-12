@@ -2,7 +2,7 @@ import { sendRequest, getMessageSender } from '../utils';
 import { logMessage } from '../logger';
 
 const prepareQuestionText = (question) => {
-    const text = question.question.replace(/\n/g, ' ');
+    const text = question.question.replace(/\n/g, ' ').replace(/\s+/g, ' ');
 
     return text;
 };
@@ -39,7 +39,14 @@ ${questionText}`);
         },
     };
 
-    await sendRequest('sendMessage', { body: answerBody, method: 'POST' });
+    try {
+        await sendRequest('sendMessage', { body: answerBody, method: 'POST' });
+    } catch (error) {
+        logMessage(`Ошибка при отправке вопроса:
+${questionText}`);
+
+        throw error;
+    }
 
     await context.db.setChatContext({
         ...chatContext,
