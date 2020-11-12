@@ -10,6 +10,7 @@ const commonAlias = (root) => ({
     config: path.resolve(root, 'config', isProductionMode ? 'production' : 'development'),
     client: path.resolve(root, 'client'),
     server: path.resolve(root, 'server'),
+    telegram: path.resolve(root, 'telegram'),
 });
 
 const serverAlias = (root) => ({

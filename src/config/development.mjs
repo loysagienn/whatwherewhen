@@ -1,5 +1,7 @@
 export * from './common';
 
+export { default as PRIVATE } from './private';
+
 export const IS_PRODUCTION = false;
 export const IS_DEVELOPMENT = true;
 export const DOMAIN = 'localhost';

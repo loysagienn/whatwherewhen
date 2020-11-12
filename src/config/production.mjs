@@ -1,5 +1,7 @@
 export * from './common';
 
+export { default as PRIVATE } from './private';
+
 export const IS_PRODUCTION = true;
 export const IS_DEVELOPMENT = false;
 export const DOMAIN = 'wweb.pro';

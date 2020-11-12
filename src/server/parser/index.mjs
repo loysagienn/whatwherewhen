@@ -3,4 +3,4 @@ import createQuestionsOrder from './createQuestionsOrder';
 
 // parseGroup(0).then(() => console.log('parse finished'));
 
-createQuestionsOrder().then(() => console.log('create order success'));
+// createQuestionsOrder().then(() => console.log('create order success'));
