@@ -2,7 +2,7 @@ import { BOT_CHATS } from '../collections';
 
 const getDefaultContext = (chatId) => ({
     chatId,
-    questionIndex: 0,
+    questionIndex: 1,
 });
 
 export const getChatContext = (db) => (chatId) => db
