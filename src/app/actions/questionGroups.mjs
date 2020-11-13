@@ -15,29 +15,22 @@ export const loadQuestionGroupChildren = (groupId) => async (dispatch, getState,
 
     const { questionGroup } = data;
 
-    let allChildrenGroups = [];
-
-    let allQuestions = [];
+    let childGroups = [];
+    let questions = [];
 
     if (questionGroup.children) {
-        allChildrenGroups = await Promise.all(questionGroup.children.map(async (childGroupId) => {
-            const { data } = await api.getQuestionGroup(childGroupId);
+        // eslint-disable-next-line no-shadow
+        const { data } = await api.getQuestionGroupChildren(groupId);
 
-            return data.questionGroup || null;
-        }));
+        childGroups = data.questionGroups;
     }
 
     if (questionGroup.questions) {
-        allQuestions = await Promise.all(questionGroup.questions.map(async (questionId) => {
-            const { data } = await api.getQuestion(questionId);
+        // eslint-disable-next-line no-shadow
+        const { data } = await api.getQuestionGroupQuestions(groupId);
 
-            return data.question || null;
-        }));
+        questions = data.questions;
     }
-
-    const childGroups = allChildrenGroups.filter(Boolean);
-
-    const questions = allQuestions.filter(Boolean);
 
     const groups = [...childGroups, questionGroup];
 

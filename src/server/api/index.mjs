@@ -1,7 +1,4 @@
-import { getQuestionGroup, getQuestion } from './requests';
+import * as requests from './requests';
 import createUserApiGetter from './createUserApiGetter';
 
-export const getUserApi = createUserApiGetter({
-    getQuestionGroup,
-    getQuestion,
-});
+export const getUserApi = createUserApiGetter(requests);

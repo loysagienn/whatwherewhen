@@ -20,6 +20,15 @@ export const setQuestion = (db) => {
     };
 };
 
+export const setQuestions = (db) => (questions) => db
+    .collection(QUESTIONS)
+    .insertMany(questions);
+
+export const getQuestionGroupQuestions = (db) => (parentGroupId) => db
+    .collection(QUESTIONS)
+    .find({ parentGroupId })
+    .toArray();
+
 export const getAllQuestions = (db) => () => db
     .collection(QUESTIONS)
     .find()

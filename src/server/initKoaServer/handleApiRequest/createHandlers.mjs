@@ -23,6 +23,8 @@ const createHandler = (methodHandlers) => async (koaCtx) => {
             data: result,
         };
     } catch (error) {
+        console.error('Request handle error', error);
+
         const result = {
             status: 'ERROR',
         };
@@ -33,6 +35,10 @@ const createHandler = (methodHandlers) => async (koaCtx) => {
 
         if (error.data) {
             result.data = error.data;
+        }
+
+        if (error.message) {
+            result.message = error.message;
         }
 
         koaCtx.status = error.status || 500;

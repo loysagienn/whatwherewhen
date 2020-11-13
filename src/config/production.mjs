@@ -4,10 +4,10 @@ export { default as PRIVATE } from './private';
 
 export const IS_PRODUCTION = true;
 export const IS_DEVELOPMENT = false;
-export const DOMAIN = 'wweb.pro';
+export const DOMAIN = 'chgk.wweb.pw';
 export const HTTP_PORT = 3478;
 export const DB_URL = 'mongodb://127.0.0.1:27017';
-export const DB_ID = 'what_when_where';
+export const DB_ID = 'chgk';
 
 export const CDN_URLS = {
     REACT: 'https://unpkg.com/react@16/umd/react.production.min.js',

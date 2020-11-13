@@ -2,17 +2,13 @@ import { wait } from 'app/utils';
 import { getDbInstance } from 'server/db';
 import getGroup from './getGroup';
 
-const addQuestions = async (questions, dbInstance) => {
-    for (let i = 0; i < questions.length; i++) {
-        await wait(100);
+const addQuestions = async (dbInstance, questions, parentGroupId) => {
+    const questionsToSave = questions.map((question) => ({ ...question, parentGroupId }));
 
-        const question = questions[i];
-
-        await dbInstance.setQuestion(question);
-    }
+    await dbInstance.setQuestions(questionsToSave);
 };
 
-const parseGroup = async (groupId) => {
+const parseGroup = async (groupId, parentGroupId) => {
     const dbInstance = await getDbInstance();
 
     const { childGroups, questions, ...group } = await getGroup(groupId);
@@ -25,19 +21,23 @@ const parseGroup = async (groupId) => {
         group.questions = questions.map(({ id }) => id);
     }
 
+    group.parentGroupId = parentGroupId || null;
+
     console.log('group', group);
 
     await dbInstance.setQuestionGroup(group);
 
     if (questions) {
-        await addQuestions(questions, dbInstance);
+        await addQuestions(dbInstance, questions, groupId);
     }
 
     if (childGroups) {
         for (let i = 0; i < childGroups.length; i++) {
             const childGroup = childGroups[i];
 
-            await parseGroup(childGroup.id);
+            await wait(500);
+
+            await parseGroup(childGroup.id, groupId);
         }
     }
 };
