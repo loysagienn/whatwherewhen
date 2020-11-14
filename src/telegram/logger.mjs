@@ -6,17 +6,18 @@ const BOT_URL = `https://api.telegram.org/bot${PRIVATE.LOGGER_BOT_TOKEN}`;
 
 const chats = [];
 
-const sendChatMessage = (chatId, message) => {
+const sendChatMessage = (chatId, message, options = {}) => {
     got.post(`${BOT_URL}/sendMessage`, {
         responseType: 'json',
         json: {
             chat_id: chatId,
             text: message,
+            ...options,
         },
-    });
+    }).catch((error) => console.error('Send logger message error', error));
 };
 
-export const logMessage = (message) => chats.forEach((chatId) => sendChatMessage(chatId, message));
+export const logMessage = (message, options) => chats.forEach((chatId) => sendChatMessage(chatId, message, options));
 
 const addChatId = (chatId) => {
     if (!chats.includes(chatId)) {

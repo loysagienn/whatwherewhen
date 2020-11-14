@@ -14,6 +14,8 @@
     "build-dev": "npm run babel-dev & npm run webpack-dev",
     "start": "export NODE_ENV=production && node lib/server/index.js",
     "start-dev": "export NODE_ENV=development && nodemon lib/server/index.js",
+    "parse-questions": "node lib/scripts/parseQuestions.js",
+    "create-order": "node lib/scripts/createOrder.js",
     "eslint": "eslint src"
   },
   "author": "",

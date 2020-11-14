@@ -1,5 +1,6 @@
 import { sendRequest, getMessageSender } from '../utils';
 import { logMessage } from '../logger';
+import sendTyping from '../sendTyping';
 
 const prepareQuestionText = (question) => {
     const text = question.question.replace(/\n/g, ' ').replace(/\s+/g, ' ');
@@ -12,26 +13,45 @@ ${questionText}
 
 <i>В ответном сообщении напишите вашу версию</i>`;
 
-const sendQuestion = async (context, message) => {
+const getRandomQuestion = async (db) => {
+    const questionsCount = await db.getQuestionsCount();
+
+    console.log('questionsCount', questionsCount);
+
+    const index = Math.floor(Math.random() * questionsCount);
+
+    const questionId = await db.getQuestionIdByOrder(index);
+
+    const question = await db.getQuestion(questionId);
+
+    return question;
+};
+
+const sendQuestion = async (context, chatContext, message) => {
     const chatId = message.chat.id;
+
+    sendTyping(message);
 
     const sender = getMessageSender(message);
 
     logMessage(`${sender} запросил вопрос`);
 
-    const { questionIndex, ...chatContext } = await context.db.getChatContext(chatId);
+    const startTime = Date.now();
 
-    const questionId = await context.db.getQuestionIdByOrder(questionIndex);
+    const question = await getRandomQuestion(context.db);
 
-    const question = await context.db.getQuestion(questionId);
+    const getQuestionTime = Date.now() - startTime;
 
     const questionText = prepareQuestionText(question);
 
     logMessage(`Отправили ${sender} вопрос:
-${questionText}`);
+${questionText}
+<i>Вопрос выбран за ${getQuestionTime} мс</i>`, {
+        parse_mode: 'HTML',
+    });
 
     const answerBody = {
-        chat_id: message.chat.id,
+        chat_id: chatId,
         text: getQuestionMessage(questionText),
         parse_mode: 'HTML',
         reply_markup: {
@@ -50,8 +70,7 @@ ${questionText}`);
 
     await context.db.setChatContext({
         ...chatContext,
-        questionIndex,
-        activeQuestionId: questionId,
+        activeQuestionId: question.id,
     });
 };
 

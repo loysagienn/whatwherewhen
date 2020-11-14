@@ -1,4 +1,4 @@
-import handleUpdate from './handleUpdate';
+import processUpdate from './processUpdate';
 
 import { sendRequest } from './utils';
 
@@ -33,11 +33,7 @@ const getUpdates = async (context, offset) => {
         return;
     }
 
-    for (let i = 0; i < updates.length; i += 1) {
-        const update = updates[i];
-
-        await handleUpdate(context, update);
-    }
+    updates.forEach((update) => processUpdate(context, update));
 
     const lastUpdate = updates[updates.length - 1];
 

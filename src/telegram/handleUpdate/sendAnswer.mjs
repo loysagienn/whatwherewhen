@@ -8,25 +8,40 @@ const prepareAnswerText = (question) => {
     return text;
 };
 
+const saveUserAnswer = async (context, activeQuestionId, message) => {
+    try {
+        await context.db.setUserAnswer({
+            chatId: message.chat.id,
+            questionId: activeQuestionId,
+            answer: message.text,
+        });
+    } catch (error) {
+        console.error('Save answer error', error);
+
+        logMessage(`Не смогли сохранить ответ, ошибка:
+${error.message}`);
+    }
+};
+
 const getAnswerMessage = (answerText) => `<b>Правильный ответ:</b>
 ${answerText}`;
 
-const sendAnswer = async (context, message) => {
+const sendAnswer = async (context, chatContext, message) => {
     const chatId = message.chat.id;
+
+    const { activeQuestionId } = chatContext;
 
     const sender = getMessageSender(message);
 
     logMessage(`${sender} прислал ответ:
 ${message.text}`);
 
-    const { activeQuestionId, questionIndex, ...chatContext } = await context.db.getChatContext(chatId);
-
     const question = await context.db.getQuestion(activeQuestionId);
 
     const answerText = prepareAnswerText(question);
 
     const answerBody = {
-        chat_id: message.chat.id,
+        chat_id: chatId,
         text: getAnswerMessage(answerText),
         parse_mode: 'HTML',
         reply_markup: {
@@ -38,9 +53,11 @@ ${message.text}`);
 
     await context.db.setChatContext({
         ...chatContext,
-        questionIndex: questionIndex + 1,
         activeQuestionId: null,
+        chatInfo: message.chat,
     });
+
+    saveUserAnswer(context, activeQuestionId, message);
 };
 
 export default sendAnswer;

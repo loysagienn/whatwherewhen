@@ -6,25 +6,25 @@ import sendDescription from './sendDescription';
 import sendQuestion from './sendQuestion';
 import sendAnswer from './sendAnswer';
 
-const handleDefaultMessage = (message) => {
+const handleDefaultMessage = async (message) => {
     const sender = getMessageSender(message);
 
     logMessage(`${sender} отправил сообщение:\n${message.text}`);
 
-    sendDescription(message);
+    return sendDescription(message);
 };
 
 const handleMessage = async (context, message) => {
     const chatId = message.chat.id;
 
-    const { activeQuestionId } = await context.db.getChatContext(chatId);
+    const chatContext = await context.db.getChatContext(chatId);
 
-    if (activeQuestionId) {
-        return sendAnswer(context, message);
+    if (chatContext.activeQuestionId) {
+        return sendAnswer(context, chatContext, message);
     }
 
     if (message.text === GET_QUESTION_TEXT || message.text === NEXT_QUESTION_TEXT) {
-        return sendQuestion(context, message);
+        return sendQuestion(context, chatContext, message);
     }
 
     return handleDefaultMessage(message);

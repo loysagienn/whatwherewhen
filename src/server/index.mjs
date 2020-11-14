@@ -1,7 +1,6 @@
 import { HTTP_PORT } from 'config';
 import { initBot } from 'telegram';
 import initKoaServer from './initKoaServer';
-import './parser';
 
 const initApp = async () => {
     try {
