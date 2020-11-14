@@ -9,7 +9,7 @@ const initApp = async () => {
             instanceId: 'apple',
         });
 
-        // await initBot();
+        await initBot();
     } catch (error) {
         console.log('init koa server error');
         console.error(error);
