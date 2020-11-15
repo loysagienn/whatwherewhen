@@ -12,6 +12,7 @@ const sendChatMessage = (chatId, message, options = {}) => {
         json: {
             chat_id: chatId,
             text: message,
+            disable_web_page_preview: true,
             ...options,
         },
     }).catch((error) => console.error('Send logger message error', error));
