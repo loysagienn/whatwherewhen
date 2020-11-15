@@ -16,6 +16,7 @@ const prepareQuestionText = (question) => {
 
     const text = question.question
         .replace(/\s*\n\s*([^А-ЯЁ])/g, (match, char) => ` ${char}`)
+        .replace(/ +/g, ' ')
         .replace(/\[[а-яА-ЯёЁ ]+:\s*\(pic:\s*([^) ]+)\)\s*\]\s*/g, (match, url) => {
             imagesUrls.push(prepareImageUrl(url));
 
