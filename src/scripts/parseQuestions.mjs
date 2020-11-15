@@ -1,3 +1,3 @@
 import parseGroup from './parseGroup';
 
-parseGroup('51879').then(() => console.log('parse finished'));
+parseGroup('70670').then(() => console.log('parse finished'));

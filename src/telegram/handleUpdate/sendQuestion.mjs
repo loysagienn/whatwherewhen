@@ -15,9 +15,9 @@ const prepareQuestionText = (question) => {
     const imagesUrls = [];
 
     const text = question.question
-        .replace(/\n/g, ' ')
-        .replace(/\s+/g, ' ')
-        .replace(/\[[а-яА-ЯёЁ ]+:\s*\(pic:\s*([^) ]+)\)\]\s*/g, (match, url) => {
+        // .replace(/\n/g, ' ')
+        // .replace(/\s+/g, ' ')
+        .replace(/\[[а-яА-ЯёЁ ]+:\s*\(pic:\s*([^) ]+)\)\s*\]\s*/g, (match, url) => {
             imagesUrls.push(prepareImageUrl(url));
 
             return '';
@@ -37,11 +37,13 @@ ${questionText}
 <i>В ответном сообщении напишите вашу версию</i>`;
 
 const getRandomQuestion = async (db) => {
-    const questionsCount = await db.getQuestionsCount();
+    // const questionsCount = await db.getQuestionsCount();
 
-    const index = Math.floor(Math.random() * questionsCount);
+    // const index = Math.floor(Math.random() * questionsCount);
 
-    const questionId = await db.getQuestionIdByOrder(index);
+    // const questionId = await db.getQuestionIdByOrder(index);
+
+    const questionId = '1198147';
 
     const question = await db.getQuestion(questionId);
 

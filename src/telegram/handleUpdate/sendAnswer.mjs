@@ -7,7 +7,9 @@ const prepareAnswerText = (question) => {
         answer, authors, comments, sources, parentTextId, number,
     } = question;
 
-    let text = answer.replace(/\n/g, ' ');
+    // const answerText = answer.replace(/\n/g, ' ');
+
+    let text = `<b>Правильный ответ:</b>\n${answer}`;
 
     if (comments) {
         text += `\n\n<b>Комментарий:</b>\n${comments}`;
@@ -18,7 +20,7 @@ const prepareAnswerText = (question) => {
     }
 
     if (sources) {
-        const sorcesText = sources.replace(/\s([0-9]\.)\s/g, (match, num) => `\n${num} `);
+        const sorcesText = sources.replace(/\s+([0-9]\.)\s+/g, (match, num) => `\n${num} `);
 
         text += `\n\n<b>Источники:</b>\n${sorcesText}`;
     }
@@ -43,9 +45,6 @@ ${error.message}`);
     }
 };
 
-const getAnswerMessage = (answerText) => `<b>Правильный ответ:</b>
-${answerText}`;
-
 const sendAnswer = async (context, chatContext, message) => {
     const chatId = message.chat.id;
 
@@ -60,9 +59,13 @@ ${message.text}`);
 
     const answerText = prepareAnswerText(question);
 
+    logMessage(`Отправляем ${sender} ответ:\n\n${answerText}`, {
+        parse_mode: 'HTML',
+    });
+
     const answerBody = {
         chat_id: chatId,
-        text: getAnswerMessage(answerText),
+        text: answerText,
         parse_mode: 'HTML',
         reply_markup: {
             keyboard: NEXT_QUESTION_KEYBOARD,
@@ -70,7 +73,13 @@ ${message.text}`);
         disable_web_page_preview: true,
     };
 
-    await sendRequest('sendMessage', { body: answerBody, method: 'POST' });
+    try {
+        await sendRequest('sendMessage', { body: answerBody, method: 'POST' });
+    } catch (error) {
+        logMessage(`Ошибка при отправке ответа:\n\n${answerText}`);
+
+        throw error;
+    }
 
     await context.db.setChatContext({
         ...chatContext,
