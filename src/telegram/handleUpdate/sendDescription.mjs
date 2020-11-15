@@ -4,7 +4,7 @@ import { GET_QUESTION_KEYBOARD } from '../constants';
 const sendDescription = async (message) => {
     const answerBody = {
         chat_id: message.chat.id,
-        text: 'Этот бот присылает случайный вопрос',
+        text: 'Этот бот выбирает случайный вопрос из базы вопросов «Что? Где? Когда?» https://db.chgk.info/',
         reply_markup: {
             keyboard: GET_QUESTION_KEYBOARD,
         },
