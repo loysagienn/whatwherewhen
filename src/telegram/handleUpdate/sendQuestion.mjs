@@ -37,13 +37,11 @@ ${questionText}
 <i>В ответном сообщении напишите вашу версию</i>`;
 
 const getRandomQuestion = async (db) => {
-    // const questionsCount = await db.getQuestionsCount();
+    const questionsCount = await db.getQuestionsCount();
 
-    // const index = Math.floor(Math.random() * questionsCount);
+    const index = Math.floor(Math.random() * questionsCount);
 
-    // const questionId = await db.getQuestionIdByOrder(index);
-
-    const questionId = '1198147';
+    const questionId = await db.getQuestionIdByOrder(index);
 
     const question = await db.getQuestion(questionId);
 

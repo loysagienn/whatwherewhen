@@ -61,6 +61,7 @@ ${message.text}`);
 
     logMessage(`Отправляем ${sender} ответ:\n\n${answerText}`, {
         parse_mode: 'HTML',
+        disable_web_page_preview: true,
     });
 
     const answerBody = {
