@@ -3,7 +3,25 @@ import { logMessage } from '../logger';
 import { NEXT_QUESTION_KEYBOARD } from '../constants';
 
 const prepareAnswerText = (question) => {
-    const text = question.answer.replace(/\n/g, ' ');
+    const {
+        answer, authors, comments, sources, parentTextId, number,
+    } = question;
+
+    let text = answer.replace(/\n/g, ' ');
+
+    if (comments) {
+        text += `\n\n<b>Комментарий:</b>\n${comments}`;
+    }
+
+    if (authors) {
+        text += `\n\n<b>Автор вопроса:</b> ${authors}`;
+    }
+
+    if (sources) {
+        text += `\n\n<b>Источники:</b>\n${sources}`;
+    }
+
+    text += `\n\n<a href="https://db.chgk.info/question/${parentTextId}/${number}">Этот вопрос на сайте</a>`;
 
     return text;
 };

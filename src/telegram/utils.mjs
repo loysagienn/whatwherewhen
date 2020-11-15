@@ -1,5 +1,6 @@
 import got from 'got';
 import { PRIVATE } from 'config';
+import FormData from 'form-data';
 import { stringifyQueryParams } from 'app/utils';
 
 const BOT_URL = `https://api.telegram.org/bot${PRIVATE.BOT_TOKEN}/`;
@@ -8,6 +9,7 @@ export const sendRequest = (request, {
     method,
     query,
     body,
+    formData,
 } = {}) => {
     const queryString = stringifyQueryParams(query);
 
@@ -15,6 +17,16 @@ export const sendRequest = (request, {
 
     if (queryString) {
         url = `${url}?${queryString}`;
+    }
+
+    if (formData) {
+        const form = new FormData();
+
+        Object.entries(formData).forEach(([key, value]) => form.append(key, value));
+
+        return got.post(url, {
+            body: form,
+        });
     }
 
     if (method === 'POST') {
@@ -50,4 +62,12 @@ export const getMessageSender = (message) => {
     }
 
     return id;
+};
+
+export const getFile = async (imageUrl) => {
+    const { body } = await got.get(imageUrl, {
+        responseType: 'buffer',
+    });
+
+    return body;
 };
