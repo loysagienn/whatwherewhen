@@ -7,12 +7,14 @@ const prepareAnswerText = (question) => {
         answer, authors, comments, sources, parentTextId, number,
     } = question;
 
-    // const answerText = answer.replace(/\n/g, ' ');
+    const answerText = answer.replace(/\s*\n\s*([^А-ЯЁ])/g, (match, char) => ` ${char}`);
 
-    let text = `<b>Правильный ответ:</b>\n${answer}`;
+    let text = `<b>Правильный ответ:</b>\n${answerText}`;
 
     if (comments) {
-        text += `\n\n<b>Комментарий:</b>\n${comments}`;
+        const commentsText = comments.replace(/\s*\n\s*([^А-ЯЁ])/g, (match, char) => ` ${char}`);
+
+        text += `\n\n<b>Комментарий:</b>\n${commentsText}`;
     }
 
     if (authors) {
@@ -20,7 +22,9 @@ const prepareAnswerText = (question) => {
     }
 
     if (sources) {
-        const sorcesText = sources.replace(/\s+([0-9]\.)\s+/g, (match, num) => `\n${num} `);
+        const sorcesText = sources
+            .replace(/\s*\n\s*([^А-ЯЁ])/g, (match, char) => ` ${char}`)
+            .replace(/\s+([0-9]\.)\s+/g, (match, num) => `\n${num} `);
 
         text += `\n\n<b>Источники:</b>\n${sorcesText}`;
     }
