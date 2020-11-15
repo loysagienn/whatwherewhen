@@ -1,4 +1,4 @@
-import { sendRequest, getMessageSender, getFile } from '../utils';
+import { sendRequest, getMessageSender } from '../utils';
 import { logMessage } from '../logger';
 import sendTyping from '../sendTyping';
 import sendImages from '../sendImages';

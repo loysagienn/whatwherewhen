@@ -18,7 +18,9 @@ const prepareAnswerText = (question) => {
     }
 
     if (sources) {
-        text += `\n\n<b>Источники:</b>\n${sources}`;
+        const sorcesText = sources.replace(/\s([0-9]\.)\s/g, (match, num) => `\n${num} `);
+
+        text += `\n\n<b>Источники:</b>\n${sorcesText}`;
     }
 
     text += `\n\n<a href="https://db.chgk.info/question/${parentTextId}/${number}">Этот вопрос на сайте</a>`;
@@ -65,6 +67,7 @@ ${message.text}`);
         reply_markup: {
             keyboard: NEXT_QUESTION_KEYBOARD,
         },
+        disable_web_page_preview: true,
     };
 
     await sendRequest('sendMessage', { body: answerBody, method: 'POST' });
