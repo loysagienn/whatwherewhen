@@ -2,16 +2,30 @@ import { sendRequest, getMessageSender } from '../utils';
 import { logMessage } from '../logger';
 import { NEXT_QUESTION_KEYBOARD } from '../constants';
 
+const normalizeAnswer = (answer) => {
+    if (typeof answer === 'number') {
+        answer = String(answer);
+    }
+
+    if (!answer) {
+        answer = '';
+    }
+
+    return answer
+        .replace(/\s*\n\s*([^А-ЯЁ])/g, (match, char) => ` ${char}`)
+        .replace(/ +/g, ' ');
+};
+
 const prepareAnswerText = (question) => {
     const {
         answer, authors, comments, sources, parentTextId, number,
     } = question;
 
-    const answerText = answer
-        .replace(/\s*\n\s*([^А-ЯЁ])/g, (match, char) => ` ${char}`)
-        .replace(/ +/g, ' ');
+    const answerText = normalizeAnswer(answer);
 
-    let text = `<b>Правильный ответ:</b>\n${answerText}`;
+    let text = answerText
+        ? `<b>Правильный ответ:</b>\n${answerText}`
+        : 'Произошла какая-то ошибка и бот не знает правильный ответ';
 
     if (comments) {
         const commentsText = comments
