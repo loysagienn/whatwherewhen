@@ -3,6 +3,8 @@ import { logMessage } from '../logger';
 import sendTyping from '../sendTyping';
 import sendImages from '../sendImages';
 
+const OWL_STICKER_TIMEOUT = 60 * 1000;
+
 const prepareImageUrl = (url) => {
     if (url.startsWith('http')) {
         return url;
@@ -45,7 +47,37 @@ const getRandomQuestion = async (db) => {
 
     const question = await db.getQuestion(questionId);
 
+    const { answer, comments } = question;
+
+    if (`${answer}${comments}`.includes('z-checkdb')) {
+        logMessage(`Ошибка в вопросе ${questionId}, выбираем другой вопрос`);
+
+        return getRandomQuestion(db);
+    }
+
     return question;
+};
+
+const sendSticker = async (context, chatId, sender, questionId) => {
+    try {
+        const { activeQuestionId } = await context.db.getChatContext(chatId);
+
+        if (activeQuestionId !== questionId) {
+            return;
+        }
+
+        const stickerBody = {
+            chat_id: chatId,
+            sticker: context.owlStickerId,
+            disable_notification: true,
+        };
+
+        await sendRequest('sendSticker', { body: stickerBody, method: 'POST' });
+
+        logMessage(`Отправили ${sender} стикер с совой`);
+    } catch (error) {
+        logMessage(`Ошибка при отправке стикера с совой ${sender}:\n${error.message}`);
+    }
 };
 
 const sendQuestion = async (context, chatContext, message) => {
@@ -81,7 +113,7 @@ const sendQuestion = async (context, chatContext, message) => {
         }
     }
 
-    logMessage(`Отправляем ${sender} вопрос:\n${questionText}\n<i>Вопрос выбран за ${getQuestionTime} мс</i>`, {
+    logMessage(`Отправляем ${sender} вопрос ${question.id}:\n${questionText}\n<i>Вопрос выбран за ${getQuestionTime} мс</i>`, {
         parse_mode: 'HTML',
     });
 
@@ -106,6 +138,8 @@ const sendQuestion = async (context, chatContext, message) => {
         ...chatContext,
         activeQuestionId: question.id,
     });
+
+    setTimeout(() => sendSticker(context, chatId, sender, question.id), OWL_STICKER_TIMEOUT);
 };
 
 export default sendQuestion;

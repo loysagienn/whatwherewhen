@@ -6,8 +6,13 @@ const BOT_URL = `https://api.telegram.org/bot${PRIVATE.LOGGER_BOT_TOKEN}`;
 
 const chats = [];
 
-const sendChatMessage = (chatId, message, options = {}) => {
-    got.post(`${BOT_URL}/sendMessage`, {
+const messagesQueue = [];
+let bisy = false;
+
+let sendMessage;
+
+const sendChatMessage = async (chatId, message, options = {}) => {
+    await got.post(`${BOT_URL}/sendMessage`, {
         responseType: 'json',
         json: {
             chat_id: chatId,
@@ -17,7 +22,39 @@ const sendChatMessage = (chatId, message, options = {}) => {
     }).catch((error) => console.error('Send logger message error', error));
 };
 
-export const logMessage = (message, options) => chats.forEach((chatId) => sendChatMessage(chatId, message, options));
+const processQueue = () => {
+    if (bisy) {
+        return;
+    }
+
+    if (messagesQueue.length === 0) {
+        return;
+    }
+
+    const { message, options } = messagesQueue.shift();
+
+    sendMessage(message, options);
+};
+
+sendMessage = async (message, options) => {
+    bisy = true;
+
+    await Promise.all(chats.map((chatId) => sendChatMessage(chatId, message, options)));
+
+    bisy = false;
+
+    processQueue();
+};
+
+export const logMessage = (message, options) => {
+    if (!bisy) {
+        sendMessage(message, options);
+
+        return;
+    }
+
+    messagesQueue.push({ message, options });
+};
 
 const addChatId = (chatId) => {
     if (!chats.includes(chatId)) {

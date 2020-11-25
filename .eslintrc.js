@@ -41,6 +41,7 @@ module.exports = {
         'jsx-a11y/no-static-element-interactions': 'off',
         'no-await-in-loop': 'off',
         'no-plusplus': 'off',
+        camelcase: 'off',
     },
     overrides: [
         {

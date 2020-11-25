@@ -3,6 +3,22 @@ import getUpdates from './getUpdates';
 import { sendRequest } from './utils';
 import { initLoggerBot } from './logger';
 
+const getOwlStickerId = async () => {
+    try {
+        const { body } = await sendRequest('getStickerSet', {
+            query: { name: 'Polar_Owl' },
+        });
+
+        const sticker = body.result.stickers.find(({ file_unique_id }) => file_unique_id === 'AgADJAADwZxgDA');
+
+        return sticker.file_id || null;
+    } catch (error) {
+        console.log('Get owl sticker error', error);
+
+        return null;
+    }
+};
+
 const initBot = async () => {
     let body;
 
@@ -28,7 +44,11 @@ const initBot = async () => {
 
     const db = await getDbInstance();
 
-    getUpdates({ db });
+    const owlStickerId = await getOwlStickerId();
+
+    const context = { db, owlStickerId };
+
+    getUpdates(context);
 };
 
 export default initBot;

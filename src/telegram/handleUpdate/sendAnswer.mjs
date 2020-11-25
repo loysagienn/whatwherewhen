@@ -2,7 +2,7 @@ import { sendRequest, getMessageSender } from '../utils';
 import { logMessage } from '../logger';
 import { NEXT_QUESTION_KEYBOARD } from '../constants';
 
-const normalizeAnswer = (answer) => {
+const normalizeString = (answer) => {
     if (typeof answer === 'number') {
         answer = String(answer);
     }
@@ -18,14 +18,20 @@ const normalizeAnswer = (answer) => {
 
 const prepareAnswerText = (question) => {
     const {
-        answer, authors, comments, sources, parentTextId, number,
+        answer, authors, passCriteria, comments, sources, parentTextId, number,
     } = question;
 
-    const answerText = normalizeAnswer(answer);
+    const answerText = normalizeString(answer);
 
     let text = answerText
         ? `<b>Правильный ответ:</b>\n${answerText}`
         : 'Произошла какая-то ошибка и бот не знает правильный ответ';
+
+    const passCriteriaText = normalizeString(passCriteria);
+
+    if (passCriteriaText) {
+        text += `\n\n<b>Зачёт:</b>\n${passCriteriaText}`;
+    }
 
     if (comments) {
         const commentsText = comments
