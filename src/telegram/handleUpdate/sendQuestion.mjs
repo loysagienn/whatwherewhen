@@ -143,7 +143,7 @@ const sendQuestion = async (context, chatContext, message) => {
         activeQuestionId: question.id,
     });
 
-    setTimeout(() => sendSticker(context, chatId, sender, question.id), OWL_STICKER_TIMEOUT);
+    // setTimeout(() => sendSticker(context, chatId, sender, question.id), OWL_STICKER_TIMEOUT);
 };
 
 export default sendQuestion;
