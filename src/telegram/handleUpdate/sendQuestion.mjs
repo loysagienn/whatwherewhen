@@ -60,6 +60,10 @@ const getRandomQuestion = async (db) => {
 
 const sendSticker = async (context, chatId, sender, questionId) => {
     try {
+        if (Math.random() < 0.33) {
+            return;
+        }
+
         const { activeQuestionId } = await context.db.getChatContext(chatId);
 
         if (activeQuestionId !== questionId) {
