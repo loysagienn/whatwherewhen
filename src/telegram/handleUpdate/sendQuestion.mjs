@@ -2,6 +2,7 @@ import { sendRequest, getMessageSender } from '../utils';
 import { logMessage } from '../logger';
 import sendTyping from '../sendTyping';
 import sendImages from '../sendImages';
+import sendSticker from './sendSticker';
 
 const OWL_STICKER_TIMEOUT = 60 * 1000;
 
@@ -58,44 +59,30 @@ const getRandomQuestion = async (db) => {
     return question;
 };
 
-const sendSticker = async (context, chatId, sender, questionId) => {
-    try {
-        if (Math.random() < 0.33) {
-            return;
-        }
+const getQuestion = async (db, activeQuestionId) => {
+    if (activeQuestionId) {
+        const question = await db.getQuestion(activeQuestionId);
 
-        const { activeQuestionId } = await context.db.getChatContext(chatId);
-
-        if (activeQuestionId !== questionId) {
-            return;
-        }
-
-        const stickerBody = {
-            chat_id: chatId,
-            sticker: context.owlStickerId,
-            disable_notification: true,
-        };
-
-        await sendRequest('sendSticker', { body: stickerBody, method: 'POST' });
-
-        logMessage(`Отправили ${sender} стикер с совой`);
-    } catch (error) {
-        logMessage(`Ошибка при отправке стикера с совой ${sender}:\n${error.message}`);
+        return question;
     }
+
+    return getRandomQuestion(db);
 };
 
 const sendQuestion = async (context, chatContext, message) => {
     const chatId = message.chat.id;
 
+    const { activeQuestionId } = chatContext;
+
     sendTyping(message);
 
     const sender = getMessageSender(message);
 
-    logMessage(`${sender} запросил вопрос`);
+    logMessage(`${sender} запросил вопрос:\n${message.text}`);
 
     const startTime = Date.now();
 
-    const question = await getRandomQuestion(context.db);
+    const question = await getQuestion(context.db, activeQuestionId);
 
     const getQuestionTime = Date.now() - startTime;
 
@@ -117,7 +104,9 @@ const sendQuestion = async (context, chatContext, message) => {
         }
     }
 
-    logMessage(`Отправляем ${sender} вопрос ${question.id}:\n${questionText}\n<i>Вопрос выбран за ${getQuestionTime} мс</i>`, {
+    const sendText = activeQuestionId ? 'Повторно отправляем' : 'Отправляем';
+
+    logMessage(`${sendText} ${sender} вопрос ${question.id}:\n${questionText}\n<i>Вопрос выбран за ${getQuestionTime} мс</i>`, {
         parse_mode: 'HTML',
     });
 
@@ -138,12 +127,11 @@ const sendQuestion = async (context, chatContext, message) => {
         throw error;
     }
 
-    await context.db.setChatContext({
-        ...chatContext,
+    await context.db.setChatContext(chatId, {
         activeQuestionId: question.id,
     });
 
-    // setTimeout(() => sendSticker(context, chatId, sender, question.id), OWL_STICKER_TIMEOUT);
+    setTimeout(() => sendSticker(context, chatId, sender, question.id), OWL_STICKER_TIMEOUT);
 };
 
 export default sendQuestion;

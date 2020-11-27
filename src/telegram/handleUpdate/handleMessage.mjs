@@ -1,10 +1,12 @@
 import { getMessageSender } from '../utils';
 import { logMessage } from '../logger';
-import { GET_QUESTION_TEXT, NEXT_QUESTION_TEXT } from '../constants';
+import { GET_QUESTION_TEXT, NEXT_QUESTION_TEXT, GET_QUESTION_COMMAND } from '../constants';
 
 import sendDescription from './sendDescription';
 import sendQuestion from './sendQuestion';
 import sendAnswer from './sendAnswer';
+
+const requestQuestionMessages = [GET_QUESTION_TEXT, NEXT_QUESTION_TEXT, GET_QUESTION_COMMAND];
 
 const handleDefaultMessage = async (message) => {
     const sender = getMessageSender(message);
@@ -19,12 +21,14 @@ const handleMessage = async (context, message) => {
 
     const chatContext = await context.db.getChatContext(chatId);
 
-    if (chatContext.activeQuestionId) {
-        return sendAnswer(context, chatContext, message);
+    const requestQuestion = requestQuestionMessages.includes(message.text);
+
+    if (requestQuestion) {
+        return sendQuestion(context, chatContext, message);
     }
 
-    if (message.text === GET_QUESTION_TEXT || message.text === NEXT_QUESTION_TEXT) {
-        return sendQuestion(context, chatContext, message);
+    if (chatContext.activeQuestionId) {
+        return sendAnswer(context, chatContext, message);
     }
 
     return handleDefaultMessage(message);

@@ -110,8 +110,7 @@ ${message.text}`);
         throw error;
     }
 
-    await context.db.setChatContext({
-        ...chatContext,
+    await context.db.setChatContext(chatId, {
         activeQuestionId: null,
         chatInfo: message.chat,
     });

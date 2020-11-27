@@ -9,14 +9,14 @@ export const getChatContext = (db) => (chatId) => db
     .findOne({ chatId })
     .then((chatContext) => chatContext || getDefaultContext(chatId));
 
-export const setChatContext = (db) => async (chatContext) => {
-    const { chatId } = chatContext;
-
+export const setChatContext = (db) => async (chatId, chatContext) => {
     const existingContext = await db.collection(BOT_CHATS).findOne({ chatId });
 
     if (existingContext) {
-        return db.collection(BOT_CHATS).updateOne({ chatId }, { $set: chatContext });
+        const updateContext = { ...existingContext, ...chatContext, chatId };
+
+        return db.collection(BOT_CHATS).updateOne({ chatId }, { $set: updateContext });
     }
 
-    return db.collection(BOT_CHATS).insertOne(chatContext);
+    return db.collection(BOT_CHATS).insertOne({ ...chatContext, chatId });
 };
