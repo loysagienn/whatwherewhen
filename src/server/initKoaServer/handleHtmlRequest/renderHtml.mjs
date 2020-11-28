@@ -10,7 +10,7 @@ const bodyStyle = 'background-color: #ffffff;';
 const bundleRoot = '/static/';
 
 // const serverRenderingOn = always(IS_PRODUCTION);
-const serverRenderingOn = () => true;
+const serverRenderingOn = () => false;
 
 const renderAppContent = compose(renderToString, renderApp, getStore);
 

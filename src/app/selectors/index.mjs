@@ -17,3 +17,9 @@ export const selectQuestionGroupChildren = (groupId) => (state) => {
 };
 
 export const selectGroupQuestions = (groupId) => (state) => state.questions[groupId] || [];
+
+export const selectRoute = (state) => state.route;
+
+export const selectAnswersCounts = (state) => state.answersCounts;
+
+export const selectGetAnswersCountsTime = (state) => state.getAnswersCountsTime;

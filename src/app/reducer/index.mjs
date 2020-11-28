@@ -3,6 +3,7 @@ import { handleActions } from 'app/utils';
 import { GROUP_CHILDREN_LOAD_START, GROUP_CHILDREN_LOAD_DONE } from 'app/actions';
 import { LOADER } from 'app/constants';
 import color from './color';
+import route from './route';
 
 const groupChildrenLoader = handleActions({
     [GROUP_CHILDREN_LOAD_START]: (state, { groupId }) => ({ ...state, [groupId]: LOADER.LOADING }),
@@ -29,4 +30,7 @@ export default combineReducers({
     questionGroups,
     questions,
     rootQuestionGroupId: (state = 0) => state,
+    answersCounts: (state = []) => state,
+    getAnswersCountsTime: (state = 0) => state,
+    route,
 });

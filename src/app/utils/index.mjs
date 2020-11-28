@@ -17,3 +17,5 @@ export { default as memoize } from './memoize';
 export { default as wait } from './wait';
 
 export { default as createDataLoadHoc } from './createDataLoadHoc';
+
+export { default as cn } from './cn';

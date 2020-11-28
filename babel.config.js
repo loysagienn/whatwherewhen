@@ -26,7 +26,7 @@ module.exports = (api) => {
     api.cache.forever();
 
     const presets = ['@babel/preset-react'];
-    const plugins = [];
+    const plugins = ['@babel/plugin-proposal-class-properties'];
 
     if (isWebpack) {
         plugins.push(['module-resolver', moduleResolverConfig({ isWebpack: true })]);

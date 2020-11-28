@@ -1,9 +1,9 @@
 /** @jsx createElement */
 
-import { createElement, useCallback, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectQuestionGroupChildren, selectGroupQuestions } from 'app/selectors';
-import css from './QuestionGroup.styl';
+import { createElement, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectRootQuestionGroupId, selectQuestionGroupChildren, selectGroupQuestions } from 'app/selectors';
+import css from './Questions.styl';
 import withGroupChildren from './withGroupChildren';
 
 const Child = ({ group, activeId, setActiveId }) => {
@@ -23,15 +23,11 @@ const Child = ({ group, activeId, setActiveId }) => {
     );
 };
 
-const Question = ({ question }) => {
-    const { id } = question;
-
-    return (
-        <div className={css.question}>
-            {question.question}
-        </div>
-    );
-};
+const Question = ({ question }) => (
+    <div className={css.question}>
+        {question.question}
+    </div>
+);
 
 const QuestionGroupBase = ({ groupId }) => {
     const children = useSelector(selectQuestionGroupChildren(groupId));
@@ -41,7 +37,7 @@ const QuestionGroupBase = ({ groupId }) => {
     const handleActiveId = (id) => (activeId === id ? setActiveId(null) : setActiveId(id));
 
     return (
-        <div className={css.root}>
+        <div className={css.group}>
             {
                 children.map((group) => (
                     <Child key={group.id} group={group} activeId={activeId} setActiveId={handleActiveId} />
@@ -58,4 +54,17 @@ const QuestionGroupBase = ({ groupId }) => {
 
 const QuestionGroup = withGroupChildren(QuestionGroupBase);
 
-export default QuestionGroup;
+const Questions = () => {
+    console.log('render questions');
+    const rootQuestionGroupId = useSelector(selectRootQuestionGroupId);
+
+    return (
+        <div className={css.root}>
+            <div className={css.wrapper}>
+                <QuestionGroup groupId={rootQuestionGroupId} />
+            </div>
+        </div>
+    );
+};
+
+export default Questions;

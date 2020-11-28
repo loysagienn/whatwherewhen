@@ -23,6 +23,14 @@ export default [
     //     pattern: '/api/log',
     // },
     {
+        id: 'LOGS',
+        pattern: '/logs',
+    },
+    {
+        id: 'QUESTIONS',
+        pattern: '/questions',
+    },
+    {
         id: 'API_GET_QUESTION_GROUP_CHILDREN',
         pattern: '/api/question-group/:groupId/children',
         processParams: ({ groupId }) => ({ groupId }),
